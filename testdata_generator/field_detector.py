@@ -32,6 +32,35 @@ FIELD_ID = "id"
 FIELD_UUID = "uuid"
 FIELD_URL = "url"
 FIELD_IP_ADDRESS = "ip_address"
+FIELD_NATIONALITY = "nationality"
+FIELD_BIRTH_PLACE = "birth_place"
+FIELD_MARITAL_STATUS = "marital_status"
+FIELD_NATIONAL_REGISTER = "national_register"
+FIELD_PASSPORT = "passport"
+FIELD_ID_CARD = "id_card"
+FIELD_MILITARY_RANK = "military_rank"
+FIELD_MILITARY_ID = "military_id"
+FIELD_SERVICE_NUMBER = "service_number"
+FIELD_UNIT = "unit"
+FIELD_DIVISION = "division"
+FIELD_BASE = "base"
+FIELD_ENLISTMENT_DATE = "enlistment_date"
+FIELD_END_OF_SERVICE = "end_of_service"
+FIELD_DEPLOYMENT_STATUS = "deployment_status"
+FIELD_SECURITY_CLEARANCE = "security_clearance"
+FIELD_MOS = "mos"  # Military Occupational Specialty
+FIELD_BLOOD_TYPE = "blood_type"
+FIELD_DOG_TAG = "dog_tag"
+FIELD_EMERGENCY_CONTACT_NAME = "emergency_contact_name"
+FIELD_EMERGENCY_CONTACT_PHONE = "emergency_contact_phone"
+FIELD_EMERGENCY_CONTACT_RELATION = "emergency_contact_relation"
+FIELD_PAY_GRADE = "pay_grade"
+FIELD_YEARS_OF_SERVICE = "years_of_service"
+FIELD_MEDALS = "medals"
+FIELD_FITNESS_SCORE = "fitness_score"
+FIELD_WEAPON_QUALIFICATION = "weapon_qualification"
+FIELD_LANGUAGE_PROFICIENCY = "language_proficiency"
+FIELD_DRIVER_LICENSE_MILITARY = "driver_license_military"
 FIELD_UNKNOWN = "unknown"
 
 # Header pattern matching - maps regex patterns to field types
@@ -72,6 +101,39 @@ HEADER_PATTERNS = [
     (r"(?i)^(uuid|guid)$", FIELD_UUID),
     (r"(?i)^(url|website|link|site|webpage)$", FIELD_URL),
     (r"(?i)^(ip|ip[\s_-]?address|ip[\s_-]?adres)$", FIELD_IP_ADDRESS),
+
+    # Personal extended
+    (r"(?i)^(nationaliteit|nationality|nationalit[eé])$", FIELD_NATIONALITY),
+    (r"(?i)^(geboorteplaats|birth[\s_-]?place|lieu[\s_-]?de[\s_-]?naissance|geburtsort)$", FIELD_BIRTH_PLACE),
+    (r"(?i)^(burgerlijke[\s_-]?staat|marital[\s_-]?status|[eé]tat[\s_-]?civil|familienstand)$", FIELD_MARITAL_STATUS),
+    (r"(?i)^(rijksregisternummer|national[\s_-]?register|rrn|bsn|niss|num[eé]ro[\s_-]?national)$", FIELD_NATIONAL_REGISTER),
+    (r"(?i)^(paspoort|passport|paspoortnummer|passport[\s_-]?number|num[eé]ro[\s_-]?de[\s_-]?passeport)$", FIELD_PASSPORT),
+    (r"(?i)^(identiteitskaart|id[\s_-]?card|id[\s_-]?kaart[\s_-]?nummer|carte[\s_-]?d[\s_-]?identit[eé]|personalausweis)$", FIELD_ID_CARD),
+
+    # Military / Defense HR
+    (r"(?i)^(rang|rank|grade|militaire[\s_-]?rang|dienstgraad)$", FIELD_MILITARY_RANK),
+    (r"(?i)^(militair[\s_-]?id|military[\s_-]?id|stamnummer)$", FIELD_MILITARY_ID),
+    (r"(?i)^(dienstnummer|service[\s_-]?number|matricule)$", FIELD_SERVICE_NUMBER),
+    (r"(?i)^(eenheid|unit|unit[eé])$", FIELD_UNIT),
+    (r"(?i)^(divisie|division|brigade|regiment)$", FIELD_DIVISION),
+    (r"(?i)^(kazerne|basis|base|camp|garnizoen|garrison)$", FIELD_BASE),
+    (r"(?i)^(datum[\s_-]?indienst|enlistment[\s_-]?date|date[\s_-]?d[\s_-]?enr[oô]lement|indiensttreding)$", FIELD_ENLISTMENT_DATE),
+    (r"(?i)^(einde[\s_-]?dienst|end[\s_-]?of[\s_-]?service|uitdiensttreding)$", FIELD_END_OF_SERVICE),
+    (r"(?i)^(inzet[\s_-]?status|deployment[\s_-]?status|operationele[\s_-]?status)$", FIELD_DEPLOYMENT_STATUS),
+    (r"(?i)^(veiligheids[\s_-]?machtiging|security[\s_-]?clearance|habilitation[\s_-]?s[eé]curit[eé])$", FIELD_SECURITY_CLEARANCE),
+    (r"(?i)^(specialisatie|mos|military[\s_-]?occupational[\s_-]?specialty|functie[\s_-]?code|beroepsspecialisatie)$", FIELD_MOS),
+    (r"(?i)^(bloedgroep|blood[\s_-]?type|groupe[\s_-]?sanguin|blutgruppe)$", FIELD_BLOOD_TYPE),
+    (r"(?i)^(dog[\s_-]?tag|identificatieplaatje|plaque[\s_-]?d[\s_-]?identit[eé])$", FIELD_DOG_TAG),
+    (r"(?i)^(noodcontact[\s_-]?naam|emergency[\s_-]?contact[\s_-]?name|contact[\s_-]?urgence[\s_-]?nom)$", FIELD_EMERGENCY_CONTACT_NAME),
+    (r"(?i)^(noodcontact[\s_-]?telefoon|emergency[\s_-]?contact[\s_-]?phone|contact[\s_-]?urgence[\s_-]?t[eé]l)$", FIELD_EMERGENCY_CONTACT_PHONE),
+    (r"(?i)^(noodcontact[\s_-]?relatie|emergency[\s_-]?contact[\s_-]?relation|lien[\s_-]?urgence)$", FIELD_EMERGENCY_CONTACT_RELATION),
+    (r"(?i)^(loonschaal|pay[\s_-]?grade|salarisschaal|[eé]chelle[\s_-]?barémique)$", FIELD_PAY_GRADE),
+    (r"(?i)^(dienstjaren|years[\s_-]?of[\s_-]?service|anciennet[eé])$", FIELD_YEARS_OF_SERVICE),
+    (r"(?i)^(medailles|medals|onderscheidingen|d[eé]corations)$", FIELD_MEDALS),
+    (r"(?i)^(fitness[\s_-]?score|fysieke[\s_-]?score|physical[\s_-]?fitness|conditietest)$", FIELD_FITNESS_SCORE),
+    (r"(?i)^(wapen[\s_-]?kwalificatie|weapon[\s_-]?qualification|qualification[\s_-]?arme|schietvaardigheidsniveau)$", FIELD_WEAPON_QUALIFICATION),
+    (r"(?i)^(taalvaardigheid|language[\s_-]?proficiency|comp[eé]tence[\s_-]?linguistique)$", FIELD_LANGUAGE_PROFICIENCY),
+    (r"(?i)^(militair[\s_-]?rijbewijs|military[\s_-]?driver[\s_-]?license|permis[\s_-]?militaire)$", FIELD_DRIVER_LICENSE_MILITARY),
 ]
 
 # Data pattern matching - used when header matching is inconclusive
@@ -119,6 +181,35 @@ FIELD_LABELS = {
     FIELD_UUID: "UUID",
     FIELD_URL: "URL/Website",
     FIELD_IP_ADDRESS: "IP-adres",
+    FIELD_NATIONALITY: "Nationaliteit",
+    FIELD_BIRTH_PLACE: "Geboorteplaats",
+    FIELD_MARITAL_STATUS: "Burgerlijke staat",
+    FIELD_NATIONAL_REGISTER: "Rijksregisternummer / BSN",
+    FIELD_PASSPORT: "Paspoortnummer",
+    FIELD_ID_CARD: "Identiteitskaartnummer",
+    FIELD_MILITARY_RANK: "Militaire rang",
+    FIELD_MILITARY_ID: "Militair ID / Stamnummer",
+    FIELD_SERVICE_NUMBER: "Dienstnummer",
+    FIELD_UNIT: "Eenheid",
+    FIELD_DIVISION: "Divisie / Brigade",
+    FIELD_BASE: "Kazerne / Basis",
+    FIELD_ENLISTMENT_DATE: "Datum indiensttreding",
+    FIELD_END_OF_SERVICE: "Datum uitdiensttreding",
+    FIELD_DEPLOYMENT_STATUS: "Inzetstatus",
+    FIELD_SECURITY_CLEARANCE: "Veiligheidsmachtiging",
+    FIELD_MOS: "Beroepsspecialisatie (MOS)",
+    FIELD_BLOOD_TYPE: "Bloedgroep",
+    FIELD_DOG_TAG: "Dog tag / Identificatieplaatje",
+    FIELD_EMERGENCY_CONTACT_NAME: "Noodcontact naam",
+    FIELD_EMERGENCY_CONTACT_PHONE: "Noodcontact telefoon",
+    FIELD_EMERGENCY_CONTACT_RELATION: "Noodcontact relatie",
+    FIELD_PAY_GRADE: "Loonschaal",
+    FIELD_YEARS_OF_SERVICE: "Dienstjaren",
+    FIELD_MEDALS: "Medailles / Onderscheidingen",
+    FIELD_FITNESS_SCORE: "Fitness score",
+    FIELD_WEAPON_QUALIFICATION: "Wapenkwalificatie",
+    FIELD_LANGUAGE_PROFICIENCY: "Taalvaardigheid",
+    FIELD_DRIVER_LICENSE_MILITARY: "Militair rijbewijs",
     FIELD_UNKNOWN: "Onbekend - kies handmatig",
 }
 
