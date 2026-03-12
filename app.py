@@ -12,9 +12,11 @@ import streamlit as st
 from testdata_generator.field_detector import (
     detect_field_type,
     FIELD_LABELS,
+    FIELD_SAMPLE_BASED,
     FIELD_UNKNOWN,
 )
 from testdata_generator.generators import TestDataGenerator, LOCALE_MAP
+from testdata_generator.pattern_analyzer import PatternAnalyzer
 
 
 # --- Page config ---
@@ -166,6 +168,22 @@ if st.session_state.uploaded_df is not None:
                 sample_values = df[col_name].dropna().head(50).tolist()
                 detected_type, confidence = detect_field_type(str(col_name), sample_values)
 
+                # If unknown but samples exist, default to sample_based
+                if detected_type == FIELD_UNKNOWN and sample_values:
+                    detected_type = FIELD_SAMPLE_BASED
+                    confidence = 0.8
+
+                # Store sample values for sample-based generation
+                if "sample_data" not in st.session_state:
+                    st.session_state.sample_data = {}
+                st.session_state.sample_data[col_name] = sample_values
+
+                # Analyze pattern from samples for display
+                pattern_desc = ""
+                if sample_values:
+                    analyzer = PatternAnalyzer(sample_values)
+                    pattern_desc = analyzer.describe()
+
                 # Confidence indicator
                 if confidence >= 0.9:
                     conf_indicator = "🟢"
@@ -185,9 +203,14 @@ if st.session_state.uploaded_df is not None:
                 st.markdown(f"**{col_name}** {conf_indicator} _{conf_text}_")
                 if sample_str:
                     st.caption(f"Voorbeeld: {sample_str}")
+                if pattern_desc:
+                    st.caption(f"📊 Patroon: {pattern_desc}")
 
                 # Selectbox for field type
-                default_index = field_type_options.index(detected_type)
+                if detected_type in field_type_options:
+                    default_index = field_type_options.index(detected_type)
+                else:
+                    default_index = field_type_options.index(FIELD_UNKNOWN)
                 selected_label = st.selectbox(
                     f"Type voor '{col_name}'",
                     options=field_type_labels,
@@ -226,8 +249,10 @@ if st.session_state.uploaded_df is not None:
         else:
             with st.spinner(f"{num_rows} rijen genereren..."):
                 generator = TestDataGenerator(locale=locale)
+                sample_data = st.session_state.get("sample_data", {})
                 rows = generator.generate_rows(
-                    st.session_state.detected_fields, num_rows
+                    st.session_state.detected_fields, num_rows,
+                    sample_data=sample_data,
                 )
                 generated_df = pd.DataFrame(rows)
                 st.session_state.generated_df = generated_df

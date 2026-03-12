@@ -204,6 +204,7 @@ FIELD_SAP_NETWORK = "sap_network"
 FIELD_SAP_NETWORK_ACTIVITY = "sap_network_activity"
 FIELD_SAP_MILESTONE = "sap_milestone"
 
+FIELD_SAMPLE_BASED = "sample_based"
 FIELD_UNKNOWN = "unknown"
 
 # Header pattern matching - maps regex patterns to field types
@@ -626,6 +627,7 @@ FIELD_LABELS = {
     FIELD_SAP_NETWORK: "SAP Netwerk (NPLNR)",
     FIELD_SAP_NETWORK_ACTIVITY: "SAP Netwerkactiviteit (VORNR)",
     FIELD_SAP_MILESTONE: "SAP Mijlpaal",
+    FIELD_SAMPLE_BASED: "Gebruik voorbeelden (patroon/roulatie)",
     FIELD_UNKNOWN: "Onbekend - kies handmatig",
 }
 

@@ -10,6 +10,7 @@ from typing import Optional
 
 from faker import Faker
 
+from .pattern_analyzer import PatternAnalyzer
 from .field_detector import (
     FIELD_FIRST_NAME, FIELD_LAST_NAME, FIELD_FULL_NAME, FIELD_EMAIL,
     FIELD_PHONE, FIELD_STREET, FIELD_HOUSE_NUMBER, FIELD_POSTCODE, FIELD_CITY,
@@ -76,7 +77,7 @@ from .field_detector import (
     FIELD_SAP_ISU_MOVE_OUT_DATE, FIELD_SAP_ISU_POD, FIELD_SAP_ISU_CONSUMPTION,
     FIELD_SAP_PROJECT_DEFINITION, FIELD_SAP_NETWORK, FIELD_SAP_NETWORK_ACTIVITY,
     FIELD_SAP_MILESTONE,
-    FIELD_UNKNOWN,
+    FIELD_SAMPLE_BASED, FIELD_UNKNOWN,
 )
 
 # Supported European locales
@@ -679,22 +680,39 @@ class TestDataGenerator:
             FIELD_SAP_NETWORK: self._gen_sap_network,
             FIELD_SAP_NETWORK_ACTIVITY: self._gen_sap_network_activity,
             FIELD_SAP_MILESTONE: self._gen_sap_milestone,
+            FIELD_SAMPLE_BASED: self._gen_unknown,
             FIELD_UNKNOWN: self._gen_unknown,
         }
         gen = generators.get(field_type, self._gen_unknown)
         return str(gen())
 
-    def generate_rows(self, field_config: dict[str, str], num_rows: int) -> list[dict]:
+    def generate_rows(
+        self,
+        field_config: dict[str, str],
+        num_rows: int,
+        sample_data: Optional[dict[str, list]] = None,
+    ) -> list[dict]:
         """
         Generate multiple rows of test data.
         field_config: {column_name: field_type}
+        sample_data: {column_name: [sample_values]} - used for sample_based fields
         """
+        # Pre-build PatternAnalyzers for sample-based fields
+        analyzers: dict[str, PatternAnalyzer] = {}
+        if sample_data:
+            for col_name, field_type in field_config.items():
+                if field_type == FIELD_SAMPLE_BASED and col_name in sample_data:
+                    analyzers[col_name] = PatternAnalyzer(sample_data[col_name])
+
         rows = []
         self._id_counter = 0
         for i in range(num_rows):
             row = {}
             for col_name, field_type in field_config.items():
-                row[col_name] = self.generate_value(field_type, i)
+                if field_type == FIELD_SAMPLE_BASED and col_name in analyzers:
+                    row[col_name] = analyzers[col_name].generate()
+                else:
+                    row[col_name] = self.generate_value(field_type, i)
             rows.append(row)
         return rows
 
