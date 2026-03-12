@@ -45,24 +45,63 @@ class PatternAnalyzer:
         """Detect if values come from a small fixed set (e.g. dropdown/enum)."""
         unique = list(dict.fromkeys(self.samples))  # preserve order, deduplicate
 
-        # If there are structured "code - label" pairs
-        coded_pattern = all(re.match(r"^\d+\s*-\s*.+$", v) for v in unique)
+        # If there are structured "code - label" pairs: "10 - Directe verkoop"
+        # The label part must contain letters (not just digits like "98-267885")
+        coded_pattern = all(
+            re.match(r"^\d+\s*-\s*(?=.*[a-zA-Z]).+$", v) for v in unique
+        )
         if coded_pattern:
             self.pattern = {"type": "fixed_set", "values": unique}
             self._generator_fn = self._gen_rotation
             return True
 
-        # If few unique values relative to total samples, treat as fixed set
-        if len(unique) <= max(5, len(self.samples) * 0.3):
-            # Check for non-numeric diversity (not just random numbers)
+        # If all values share a consistent structural pattern (same token types
+        # and lengths), they are generated data, not a fixed set
+        if len(unique) > 2 and self._has_consistent_structure(unique):
+            return False
+
+        # If few unique values relative to total AND there are actual duplicates,
+        # treat as fixed set
+        if len(unique) <= max(3, len(self.samples) * 0.3):
             all_numeric = all(re.match(r"^[\d.,]+$", v) for v in unique)
-            if not all_numeric or len(unique) <= 5:
-                if len(unique) < len(self.samples) * 0.8:
+            if not all_numeric or len(unique) <= 3:
+                # Require actual duplicates (unique < total) to confirm it's a set
+                if len(unique) < len(self.samples):
                     self.pattern = {"type": "fixed_set", "values": unique}
                     self._generator_fn = self._gen_rotation
                     return True
 
         return False
+
+    def _has_consistent_structure(self, values: list) -> bool:
+        """Check if all values follow the same structural pattern.
+
+        E.g. "98-267885", "46-261390" both match DD-DDDDDD.
+        This indicates generated/formatted data, not a fixed set.
+        """
+        def structure(s):
+            result = []
+            i = 0
+            while i < len(s):
+                if s[i].isdigit():
+                    j = i
+                    while j < len(s) and s[j].isdigit():
+                        j += 1
+                    result.append(("D", j - i))
+                    i = j
+                elif s[i].isalpha():
+                    j = i
+                    while j < len(s) and s[j].isalpha():
+                        j += 1
+                    result.append(("A", j - i))
+                    i = j
+                else:
+                    result.append(("S", s[i]))
+                    i += 1
+            return tuple(result)
+
+        structures = [structure(v) for v in values]
+        return len(set(structures)) == 1
 
     def _detect_numeric_pattern(self) -> bool:
         """Detect numeric patterns: pure integers, decimals, prefixed numbers."""
