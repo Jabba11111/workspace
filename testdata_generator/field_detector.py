@@ -436,6 +436,8 @@ DATA_PATTERNS = [
     (r"^https?://", FIELD_URL),
     (r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", FIELD_IP_ADDRESS),
     (r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", FIELD_UUID),
+    # ISU consumption: number + energy/volume unit
+    (r"^[\d.,]+\s*(kWh|MWh|GWh|m[³3]|GJ|MJ|l|L)$", FIELD_SAP_ISU_CONSUMPTION),
 ]
 
 

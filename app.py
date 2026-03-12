@@ -114,9 +114,46 @@ if st.session_state.uploaded_df is not None:
         "verdienen extra aandacht."
     )
 
-    # All available field type options
-    field_type_options = list(FIELD_LABELS.keys())
-    field_type_labels = [FIELD_LABELS[ft] for ft in field_type_options]
+    # All available field type options, grouped by category for easier navigation
+    FIELD_CATEGORIES = {
+        "Persoon": ["first_name", "last_name", "full_name", "gender", "age",
+                     "date_of_birth", "birth_place", "nationality", "marital_status"],
+        "Identificatie": ["id", "uuid", "national_register", "passport", "id_card"],
+        "Contact": ["email", "phone", "street", "house_number", "postcode",
+                     "city", "country"],
+        "Noodcontact": ["emergency_contact_name", "emergency_contact_phone",
+                        "emergency_contact_relation"],
+        "Zakelijk": ["company", "vat_number", "iban", "ean"],
+        "Technisch": ["url", "ip_address", "date", "integer", "decimal", "boolean"],
+        "Militair": ["military_rank", "military_id", "service_number", "unit",
+                      "division", "base", "enlistment_date", "end_of_service",
+                      "deployment_status", "security_clearance", "mos", "blood_type",
+                      "dog_tag", "pay_grade", "years_of_service", "medals",
+                      "fitness_score", "weapon_qualification", "language_proficiency",
+                      "driver_license_military"],
+    }
+    # Build categorized labels: "Categorie > Label"
+    field_type_options = []
+    field_type_labels = []
+    categorized_types = set()
+    for cat_name, type_keys in FIELD_CATEGORIES.items():
+        for ft in type_keys:
+            if ft in FIELD_LABELS:
+                field_type_options.append(ft)
+                field_type_labels.append(f"{cat_name} > {FIELD_LABELS[ft]}")
+                categorized_types.add(ft)
+    # Add all SAP types grouped by module prefix
+    for ft, label in FIELD_LABELS.items():
+        if ft.startswith("sap_") and ft not in categorized_types:
+            field_type_options.append(ft)
+            field_type_labels.append(label)  # Already prefixed with "SAP ..."
+            categorized_types.add(ft)
+    # Add any remaining (including unknown)
+    for ft, label in FIELD_LABELS.items():
+        if ft not in categorized_types:
+            field_type_options.append(ft)
+            field_type_labels.append(label)
+            categorized_types.add(ft)
 
     # Detect field types for each column
     cols_per_row = 3
