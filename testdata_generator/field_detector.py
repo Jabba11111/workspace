@@ -240,7 +240,7 @@ HEADER_PATTERNS = [
     (r"(?i)^(leeftijd|age|alter|[aâ]ge)$", FIELD_AGE),
 
     # Technical
-    (r"(?i)^(id|identifier|nummer|number)$", FIELD_ID),
+    (r"(?i)^(id|identifier|personeelsnummer|nummer|number)$", FIELD_ID),
     (r"(?i)^(uuid|guid)$", FIELD_UUID),
     (r"(?i)^(url|website|link|site|webpage)$", FIELD_URL),
     (r"(?i)^(ip|ip[\s_-]?address|ip[\s_-]?adres)$", FIELD_IP_ADDRESS),
@@ -251,7 +251,7 @@ HEADER_PATTERNS = [
     (r"(?i)^(burgerlijke[\s_-]?staat|marital[\s_-]?status|[eé]tat[\s_-]?civil|familienstand)$", FIELD_MARITAL_STATUS),
     (r"(?i)^(rijksregisternummer|national[\s_-]?register|rrn|bsn|niss|num[eé]ro[\s_-]?national)$", FIELD_NATIONAL_REGISTER),
     (r"(?i)^(paspoort|passport|paspoortnummer|passport[\s_-]?number|num[eé]ro[\s_-]?de[\s_-]?passeport)$", FIELD_PASSPORT),
-    (r"(?i)^(identiteitskaart|id[\s_-]?card|id[\s_-]?kaart[\s_-]?nummer|carte[\s_-]?d[\s_-]?identit[eé]|personalausweis)$", FIELD_ID_CARD),
+    (r"(?i)^(identiteitskaart(?:nummer)?|id[\s_-]?card|id[\s_-]?kaart[\s_-]?nummer|carte[\s_-]?d[\s_-]?identit[eé]|personalausweis)$", FIELD_ID_CARD),
 
     # Military / Defense HR
     (r"(?i)^(rang|rank|grade|militaire[\s_-]?rang|dienstgraad)$", FIELD_MILITARY_RANK),
@@ -260,8 +260,8 @@ HEADER_PATTERNS = [
     (r"(?i)^(eenheid|unit|unit[eé])$", FIELD_UNIT),
     (r"(?i)^(divisie|division|brigade|regiment)$", FIELD_DIVISION),
     (r"(?i)^(kazerne|basis|base|camp|garnizoen|garrison)$", FIELD_BASE),
-    (r"(?i)^(datum[\s_-]?indienst|enlistment[\s_-]?date|date[\s_-]?d[\s_-]?enr[oô]lement|indiensttreding)$", FIELD_ENLISTMENT_DATE),
-    (r"(?i)^(einde[\s_-]?dienst|end[\s_-]?of[\s_-]?service|uitdiensttreding)$", FIELD_END_OF_SERVICE),
+    (r"(?i)^(datum[\s_-]?indienst(?:treding)?|enlistment[\s_-]?date|date[\s_-]?d[\s_-]?enr[oô]lement|indiensttreding)$", FIELD_ENLISTMENT_DATE),
+    (r"(?i)^(datum[\s_-]?uitdienst(?:treding)?|einde[\s_-]?dienst|end[\s_-]?of[\s_-]?service|uitdiensttreding)$", FIELD_END_OF_SERVICE),
     (r"(?i)^(inzet[\s_-]?status|deployment[\s_-]?status|operationele[\s_-]?status)$", FIELD_DEPLOYMENT_STATUS),
     (r"(?i)^(veiligheids[\s_-]?machtiging|security[\s_-]?clearance|habilitation[\s_-]?s[eé]curit[eé])$", FIELD_SECURITY_CLEARANCE),
     (r"(?i)^(specialisatie|mos|military[\s_-]?occupational[\s_-]?specialty|functie[\s_-]?code|beroepsspecialisatie)$", FIELD_MOS),
@@ -320,7 +320,7 @@ HEADER_PATTERNS = [
     (r"(?i)^(spart|sales[\s_-]?division|verkoopdivisie|sparte)$", FIELD_SAP_SALES_DIVISION),
     (r"(?i)^(vstel|shipping[\s_-]?point|verzendpunt|versandstelle)$", FIELD_SAP_SHIPPING_POINT),
     (r"(?i)^(delivery[\s_-]?number|leveringsnummer|lieferscheinnummer)$", FIELD_SAP_DELIVERY_NUMBER),
-    (r"(?i)^(billing[\s_-]?document|factuurbelegnummer|fakturanummer)$", FIELD_SAP_BILLING_DOCUMENT),
+    (r"(?i)^(billing[\s_-]?document|factuurdocument|factuurbelegnummer|fakturanummer)$", FIELD_SAP_BILLING_DOCUMENT),
     (r"(?i)^(kschl|pricing[\s_-]?condition|prijsconditie|konditionsart)$", FIELD_SAP_PRICING_CONDITION),
     (r"(?i)^(inco1|incoterms)$", FIELD_SAP_INCOTERMS),
     (r"(?i)^(zterm|payment[\s_-]?terms|betalingsconditie|zahlungsbedingung)$", FIELD_SAP_PAYMENT_TERMS),
@@ -347,7 +347,7 @@ HEADER_PATTERNS = [
     (r"(?i)^(kokrs|controlling[\s_-]?area|kostenrekeningschema|kostenrechnungskreis)$", FIELD_SAP_CONTROLLING_AREA),
 
     # --- SAP HR/HCM ---
-    (r"(?i)^(pernr|personnel[\s_-]?number|personeelsnummer|personalnummer)$", FIELD_SAP_PERSONNEL_NUMBER),
+    (r"(?i)^(pernr|personnel[\s_-]?number|sap[\s_-]?personeelsnummer|personalnummer)$", FIELD_SAP_PERSONNEL_NUMBER),
     (r"(?i)^(werks.*hr|personnel[\s_-]?area|personeelsgebied|personalbereich)$", FIELD_SAP_PERSONNEL_AREA),
     (r"(?i)^(btrtl|personnel[\s_-]?subarea|personeelsdeelgebied|personalteilbereich)$", FIELD_SAP_PERSONNEL_SUBAREA),
     (r"(?i)^(persg|employee[\s_-]?group|werknemersgroep|mitarbeitergruppe)$", FIELD_SAP_EMPLOYEE_GROUP),
@@ -408,7 +408,7 @@ HEADER_PATTERNS = [
     (r"(?i)^(zwnummer|register[\s_-]?isu|teller|z[aä]hlwerk)$", FIELD_SAP_ISU_REGISTER),
     (r"(?i)^(ablbelnr|meter[\s_-]?reading|meterstand|ablesung)$", FIELD_SAP_ISU_METER_READING),
     (r"(?i)^(taession|rate[\s_-]?category|tariefcategorie|tariftyp)$", FIELD_SAP_ISU_RATE_CATEGORY),
-    (r"(?i)^(sparte.*isu|isu[\s_-]?division|divisie[\s_-]?isu|sparte[\s_-]?isu)$", FIELD_SAP_ISU_DIVISION_ISU),
+    (r"(?i)^(sparte.*isu|is[\s_-]?u[\s_-]?division|is[\s_-]?u[\s_-]?divisie|isu[\s_-]?division|divisie[\s_-]?isu|sparte[\s_-]?isu)$", FIELD_SAP_ISU_DIVISION_ISU),
     (r"(?i)^(einzdat|move[\s_-]?in[\s_-]?date|intrekdatum|einzugsdatum)$", FIELD_SAP_ISU_MOVE_IN_DATE),
     (r"(?i)^(auszdat|move[\s_-]?out[\s_-]?date|uittrekdatum|auszugsdatum)$", FIELD_SAP_ISU_MOVE_OUT_DATE),
     (r"(?i)^(ext_ui|pod|point[\s_-]?of[\s_-]?delivery|afleveringspunt)$", FIELD_SAP_ISU_POD),
@@ -629,11 +629,60 @@ FIELD_LABELS = {
 
 
 def detect_field_type_from_header(header: str) -> Optional[str]:
-    """Detect field type based on column header name."""
+    """Detect field type based on column header name.
+
+    Uses multiple strategies:
+    1. Exact match on the full header
+    2. Extract SAP technical code from parentheses (e.g. "MATNR" from "SAP Materiaalnummer (MATNR)")
+    3. Try each word in the header individually
+    4. Substring search for key terms within the header
+    """
     clean = header.strip()
+
+    # Strategy 1: Exact match on full header
     for pattern, field_type in HEADER_PATTERNS:
         if re.match(pattern, clean):
             return field_type
+
+    # Strategy 2: Extract text between parentheses and try matching that
+    # e.g. "SAP Materiaalnummer (MATNR)" -> try "MATNR"
+    paren_match = re.search(r"\(([^)]+)\)", clean)
+    if paren_match:
+        extracted = paren_match.group(1).strip()
+        for pattern, field_type in HEADER_PATTERNS:
+            if re.match(pattern, extracted):
+                return field_type
+
+    # Strategy 3: Try individual words from the header
+    # e.g. "SAP Materiaalnummer (MATNR)" -> try "SAP", "Materiaalnummer"
+    # If the header looks like a SAP field, only match SAP-typed results
+    is_sap_header = bool(re.search(r"(?i)\bsap\b|is[\s_-]?u", clean))
+    words = re.split(r"[\s\(\)/,;]+", clean)
+    for word in words:
+        word = word.strip()
+        if len(word) < 2:
+            continue
+        for pattern, field_type in HEADER_PATTERNS:
+            if re.match(pattern, word):
+                if is_sap_header and not field_type.startswith("sap_"):
+                    continue
+                return field_type
+
+    # Strategy 4: Substring search - remove anchors and try contains match
+    # This catches cases like "Noodcontact naam" matching "noodcontact[\s_-]?naam"
+    for pattern, field_type in HEADER_PATTERNS:
+        if is_sap_header and not field_type.startswith("sap_"):
+            continue
+        # Convert exact-match pattern to a contains pattern by removing ^ and $
+        contains_pattern = pattern.replace("^(", "(?:").rstrip(")")
+        if contains_pattern.endswith("$"):
+            contains_pattern = contains_pattern[:-1]
+        try:
+            if re.search(contains_pattern, clean, re.IGNORECASE):
+                return field_type
+        except re.error:
+            continue
+
     return None
 
 
